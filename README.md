@@ -188,9 +188,7 @@ All endpoints are prefixed with `/api/products`.
 {
   "id": "bigint",
   "name": "string",
-  "price": "integer",
-  "createdAt": "string (ISO 8601)",
-  "updatedAt": "string (ISO 8601)"
+  "price": "integer"
 }
 ```
 
