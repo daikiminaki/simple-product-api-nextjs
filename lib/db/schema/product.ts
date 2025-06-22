@@ -1,8 +1,7 @@
-import { sql } from "drizzle-orm";
-import { bigint, integer, pgTable, text } from "drizzle-orm/pg-core";
+import { integer, pgTable, text, bigserial } from "drizzle-orm/pg-core";
 
 export const product = pgTable("product", {
-    id: bigint({ mode: "number" }).primaryKey().default(sql`gen_random_uuid()`),
+    id: bigserial({ mode: "number" }).primaryKey(),
     name: text().notNull(),
     price: integer().notNull(),
 });

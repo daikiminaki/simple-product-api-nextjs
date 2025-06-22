@@ -24,6 +24,10 @@ RUN npx drizzle-kit generate
 FROM node:18-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production
+
+# Install PostgreSQL client for pg_isready
+RUN apk add --no-cache postgresql-client
+
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/node_modules ./node_modules
@@ -33,8 +37,14 @@ COPY --from=builder /app/lib/db ./lib/db
 COPY --from=builder /app/scripts/entrypoint.sh ./entrypoint.sh
 RUN chmod +x ./entrypoint.sh
 
+# Install PostgreSQL client for pg_isready
+RUN apk add --no-cache postgresql-client
+
 # Expose port
 EXPOSE 3000
+
+# Start Next.js app
+ENTRYPOINT ["./entrypoint.sh"]
 
 # Start Next.js app
 CMD ["npm", "start"]
