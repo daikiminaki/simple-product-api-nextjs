@@ -25,20 +25,17 @@ FROM node:18-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 
-# Install PostgreSQL client for pg_isready
-RUN apk add --no-cache postgresql-client
-
+# Next.js build
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package.json ./package.json
+
+# Drizzle for database migrations
 COPY --from=builder /app/drizzle.config.ts ./drizzle.config.ts
 COPY --from=builder /app/lib/db ./lib/db
 COPY --from=builder /app/scripts/entrypoint.sh ./entrypoint.sh
 RUN chmod +x ./entrypoint.sh
-
-# Install PostgreSQL client for pg_isready
-RUN apk add --no-cache postgresql-client
 
 # Expose port
 EXPOSE 3000
