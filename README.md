@@ -31,7 +31,12 @@ This repository contains a simple **Product API** built with Next.js and Docker,
    * Edit `.env` and set the following values:
 
      ```ini
-     DATABASE_URL=postgres://postgres:password@db:5432/product_db
+     DB_USER=postgres
+     DB_PASSWORD=postgres
+     DB_NAME=products_db
+     DB_HOST=db
+     DB_PORT=5432
+
      NEXT_PUBLIC_API_URL=http://localhost:3000/api
      ```
 
