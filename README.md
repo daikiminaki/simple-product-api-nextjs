@@ -17,8 +17,8 @@ This repository contains a simple **Product API** built with Next.js and Docker,
 1. **Clone the repository**
 
    ```bash
-   git clone https://github.com/your-org/your-repo.git
-   cd your-repo
+   git clone https://github.com/daikiminaki/simple-product-api-nextjs.git
+   cd simple-product-api-nextjs
    ```
 
 2. **Create and configure environment variables**
@@ -31,11 +31,7 @@ This repository contains a simple **Product API** built with Next.js and Docker,
    * Edit `.env` and set the following values:
 
      ```ini
-     DB_USER=postgres
-     DB_PASSWORD=postgres
-     DB_NAME=products_db
-     DB_HOST=db
-     DB_PORT=5432
+     DATABASE_URL=postgres://postgres:password@db:5432/product_db
      NEXT_PUBLIC_API_URL=http://localhost:3000/api
      ```
 
@@ -71,20 +67,17 @@ All endpoints are prefixed with `/api/products`.
 | ------ | ------------------- | -------------------------- | -------------------------------------- | ---------------------------------------------------------------- |
 | GET    | `/api/products`     | List all products          | N/A                                    | `200 OK`<br/>JSON array of product objects                       |
 | GET    | `/api/products/:id` | Get a single product by ID | N/A                                    | `200 OK`<br/>JSON product object<br/>`404 Not Found` if missing  |
-| POST   | `/api/products`     | Create a new product       | JSON `{ name, description, price }`    | `201 Created`<br/>JSON newly created product                     |
-| PUT    | `/api/products/:id` | Update an existing product | JSON `{ name?, description?, price? }` | `200 OK`<br/>JSON updated product<br/>`404 Not Found` if missing |
+| POST   | `/api/products`     | Create a new product       | JSON `{ name, price }`    | `201 Created`<br/>JSON newly created product                     |
+| PUT    | `/api/products/:id` | Update an existing product | JSON `{ name, price? }` | `200 OK`<br/>JSON updated product<br/>`404 Not Found` if missing |
 | DELETE | `/api/products/:id` | Delete a product           | N/A                                    | `204 No Content`<br/>`404 Not Found` if missing                  |
 
 ### Product Object Schema
 
 ```json
 {
-  "id": "string (UUID)",
+  "id": "bigint",
   "name": "string",
-  "description": "string",
-  "price": "number",
-  "createdAt": "string (ISO 8601)",
-  "updatedAt": "string (ISO 8601)"
+  "price": "integer"
 }
 ```
 
@@ -92,12 +85,10 @@ All endpoints are prefixed with `/api/products`.
 
 ## Additional Notes & Limitations
 
-* **Migrations**: Uses Drizzle Kit to manage schema migrations. The `scripts/entrypoint.sh` runs `npx drizzle-kit push` automatically at container start.
-* **Data persistence**: PostgreSQL data is stored in a named Docker volume (`db-data`), so data remains between restarts.
+* **Migrations**: Uses Drizzle Kit to manage schema migrations.
+* **Data persistence**: PostgreSQL data is stored in a named Docker volume (`pgdata`), so data remains between restarts.
 * **No authentication**: All endpoints are public. Consider adding JWT or session-based auth for production.
-* **No pagination**: The `GET /api/products` endpoint returns all products. For large datasets, add `limit`/`offset` query parameters.
 * **Error handling**: Returns standard HTTP codes but no detailed error body. You may expand with richer error responses.
-* **Custom build output**: This project uses the default `.next` build directory. If you change `distDir` in `next.config.js`, update the Dockerfile accordingly.
 
 ---
 
